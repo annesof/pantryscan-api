@@ -1,0 +1,54 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""category """
+type Category {
+  color: String
+  id: ID!
+  name: String
+}
+
+input CreateProductInput {
+  brand: String!
+  ean: String!
+  genericName: String!
+  imageSmallUrl: String!
+  imageUrl: String!
+  ingredients: String!
+  name: String!
+  nutriscoreGrade: String!
+  quantity: String!
+  servingSize: String!
+}
+
+"""Location """
+type Location {
+  id: ID!
+  name: String!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+}
+
+"""product """
+type Product {
+  brand: String
+  categories: [Category!]
+  ean: ID!
+  genericName: String
+  imageSmallUrl: String
+  imageUrl: String
+  ingredients: String
+  name: String!
+  nutriscoreGrade: String
+  quantity: String
+  servingSize: String
+}
+
+type Query {
+  findAllCategories: [Category!]!
+  findOneProduct(ean: String!): Product!
+  findProductByCategories(categories: String!): [Product!]!
+}
