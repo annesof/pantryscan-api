@@ -9,6 +9,8 @@ import { join } from 'path';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { FoodModule } from './food/food.module';
 import { CategoryModule } from './category/category.module';
+import { LocationModule } from './location/location.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { CategoryModule } from './category/category.module';
     ProductModule,
     FoodModule,
     CategoryModule,
+    LocationModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

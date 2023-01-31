@@ -8,7 +8,6 @@ export class CategoryResolver {
 
   @Query(() => [Category], { name: 'findAllCategories' })
   findAll() {
-    console.log('totoi');
     return this.categoryService.findAll();
   }
 }

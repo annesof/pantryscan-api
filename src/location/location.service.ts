@@ -15,4 +15,8 @@ export class LocationService {
     const product = this.locationRepository.create(createLocationInput);
     return this.locationRepository.save(product);
   }
+
+  async findAll(): Promise<Location[]> {
+    return await this.locationRepository.find();
+  }
 }

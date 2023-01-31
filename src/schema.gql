@@ -49,6 +49,16 @@ type Product {
 
 type Query {
   findAllCategories: [Category!]!
+  findAllLocations: [Location!]!
   findOneProduct(ean: String!): Product!
+  findOneUser(id: String!): User!
   findProductByCategories(categories: String!): [Product!]!
+}
+
+"""user """
+type User {
+  favoriteCategories: [Category!]
+  firstName: String
+  id: ID!
+  lastName: String
 }
