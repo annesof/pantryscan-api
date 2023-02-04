@@ -1,5 +1,12 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Product } from '../product/product.entity';
 import { Location } from '../location/location.entity';
 
@@ -22,7 +29,14 @@ export class Food {
   @Field(() => Product)
   product: Product;
 
-  @ManyToOne(() => Location)
+  @ManyToOne(() => Location, { eager: true })
   @Field()
   location: Location;
+
+  @CreateDateColumn()
+  @Field()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
 }

@@ -19,4 +19,11 @@ export class FoodService {
   async remove(id: number) {
     await this.foodRepository.delete(id);
   }
+
+  async findByProduct(ean: string): Promise<Food[]> {
+    return await this.foodRepository
+      .createQueryBuilder('food')
+      .where('product.ean = :ean', { ean })
+      .getMany();
+  }
 }

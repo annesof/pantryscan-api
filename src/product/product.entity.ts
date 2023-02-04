@@ -6,6 +6,8 @@ import {
   JoinTable,
   PrimaryColumn,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Category } from '../category/category.entity';
 import { Food } from '../food/food.entity';
@@ -58,6 +60,13 @@ export class Product {
   @Field(() => [Category], { nullable: true }) //important to be array
   categories?: Category[];
 
-  @OneToMany(() => Food, (food) => food.product)
+  @OneToMany(() => Food, (food) => food.product, { eager: true })
+  @Field(() => [Food], { nullable: true })
   foods?: Food[];
+
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
 }
