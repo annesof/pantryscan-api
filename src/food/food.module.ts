@@ -6,5 +6,6 @@ import { Food } from './food.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Food])],
   providers: [FoodService],
+  exports: [FoodService],
 })
 export class FoodModule {}

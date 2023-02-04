@@ -6,7 +6,7 @@
 type Category {
   color: String
   id: ID!
-  name: String
+  name: String!
 }
 
 input CreateProductInput {
@@ -20,6 +20,30 @@ input CreateProductInput {
   nutriscoreGrade: String!
   quantity: String!
   servingSize: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input FetchProductsArgs {
+  categories: String
+  location: String
+  skip: Int = 0
+  sortBy: String = "NAME"
+  take: Int = 10
+  withFoods: Boolean = false
+}
+
+"""food """
+type Food {
+  createdDate: DateTime!
+  expirationDate: String
+  id: ID!
+  location: Location!
+  product: Product!
+  started: Boolean
 }
 
 """Location """
@@ -37,6 +61,7 @@ type Product {
   brand: String
   categories: [Category!]
   ean: ID!
+  foods: [Food!]
   genericName: String
   imageSmallUrl: String
   imageUrl: String
@@ -49,6 +74,17 @@ type Product {
 
 type Query {
   findAllCategories: [Category!]!
+  findAllLocations: [Location!]!
   findOneProduct(ean: String!): Product!
+  findOneUser(id: String!): User!
   findProductByCategories(categories: String!): [Product!]!
+  findProducts(fetchProductsArgs: FetchProductsArgs!): [Product!]!
+}
+
+"""user """
+type User {
+  favoriteCategories: [Category!]
+  firstName: String
+  id: ID!
+  lastName: String
 }

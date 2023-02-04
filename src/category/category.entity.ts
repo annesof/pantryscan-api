@@ -7,11 +7,11 @@ import { Product } from 'src/product/product.entity';
 export class Category {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
-  @Column({ nullable: true })
-  @Field({ nullable: true })
-  name?: string;
+  @Column()
+  @Field()
+  name: string;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
