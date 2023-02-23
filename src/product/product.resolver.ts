@@ -10,7 +10,6 @@ import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { CategoryService } from 'src/category/category.service';
-import { FoodService } from 'src/food/food.service';
 import { FetchProductsArgs } from './dto/fetch-products.args';
 import { Category } from 'src/category/category.entity';
 
@@ -19,7 +18,6 @@ export class ProductResolver {
   constructor(
     private readonly productService: ProductService,
     private readonly categoryService: CategoryService,
-    private readonly foodService: FoodService,
   ) {}
 
   @Mutation(() => Product, { name: 'createProduct' })
@@ -66,15 +64,7 @@ export class ProductResolver {
     return await this.foodService.findByProduct(ean);
   }*/
 
-  /* @Mutation(() => Employee)
-  updateEmployee(
-    @Args('updateEmployeeInput') updateEmployeeInput: UpdateEmployeeInput,
-  ) {
-    return this.productService.update(
-      updateEmployeeInput.id,
-      updateEmployeeInput,
-    );
-  }
+  /*
 
   @Mutation(() => Employee)
   removeEmployee(@Args('id', { type: () => Int }) id: number) {

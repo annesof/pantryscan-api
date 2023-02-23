@@ -12,8 +12,10 @@ import { Category } from '../category/category.entity';
 @Entity()
 export class User {
   @Field(() => ID)
-  @PrimaryGeneratedColumn('increment')
-  id: string;
+  @PrimaryGeneratedColumn('increment', {
+    primaryKeyConstraintName: 'pk_user_id',
+  })
+  id: number;
 
   @Column({ nullable: true })
   @Field({ nullable: true })

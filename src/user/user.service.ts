@@ -10,7 +10,7 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findById(id: string): Promise<User> {
+  async findById(id: number): Promise<User> {
     return await this.userRepository.findOne({ where: { id } });
   }
 }

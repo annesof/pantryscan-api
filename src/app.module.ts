@@ -7,10 +7,12 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { FoodModule } from './food/food.module';
+import { ArticleModule } from './article/article.module';
 import { CategoryModule } from './category/category.module';
 import { LocationModule } from './location/location.module';
+import { ContentUnitModule } from './contentUnit/contentUnit.module';
 import { UserModule } from './user/user.module';
+import { UserProductSettingsModule } from './userProductsSettings/userProductSettings.module';
 
 @Module({
   imports: [
@@ -24,7 +26,15 @@ import { UserModule } from './user/user.module';
           type: 'postgres',
           logging: true,
           url: configService.get('DATABASE_URL'),
-          entities: [__dirname + '/**/**.entity{.ts,.js}'],
+          autoLoadEntities: true,
+          /*entities: [
+            __dirname + '/contentUnit/contentUnit.entity.ts',
+            __dirname + '/category/category.entity.ts',
+            __dirname + '/location/location.entity.ts',
+            __dirname + '/article/article.entity.ts',
+            __dirname + '/product/product.entity.ts',
+            __dirname + '/user/user.entity.ts',
+          ],*/
           migrations: ['dist/src/migrations/*{.ts,.js}'],
           synchronize: true,
           migrationsRun: true,
@@ -37,11 +47,13 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
-    ProductModule,
-    FoodModule,
-    CategoryModule,
     LocationModule,
+    ContentUnitModule,
+    CategoryModule,
     UserModule,
+    ProductModule,
+    ArticleModule,
+    UserProductSettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

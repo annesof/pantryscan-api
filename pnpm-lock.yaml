@@ -4,6 +4,7 @@ specifiers:
   '@commitlint/cli': ^17.1.2
   '@commitlint/config-conventional': ^17.1.0
   '@commitlint/prompt': ^17.1.2
+  '@graphql-tools/utils': ^9.2.1
   '@nestjs/apollo': ^10.1.4
   '@nestjs/axios': ^0.1.0
   '@nestjs/cli': ^9.0.0
@@ -50,6 +51,7 @@ specifiers:
   typescript: ^4.7.4
 
 dependencies:
+  '@graphql-tools/utils': 9.2.1_graphql@16.6.0
   '@nestjs/apollo': 10.1.4_uqubv4clx2qysdxj2dnnzvl2pq
   '@nestjs/axios': 0.1.0_yjxybkvltbh2d3oivnq5etx3oi
   '@nestjs/common': 9.1.6_yzt46al3aifnexifjjdb4dxxja
@@ -990,6 +992,16 @@ packages:
       tslib: 2.4.0
     dev: false
 
+  /@graphql-tools/utils/9.2.1_graphql@16.6.0:
+    resolution: {integrity: sha512-WUw506Ql6xzmOORlriNrD6Ugx+HjVgYxt9KCXD9mHAak+eaXSwuGGPyE60hy9xaDEoXKBsG7SkG69ybitaVl6A==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      '@graphql-typed-document-node/core': 3.1.1_graphql@16.6.0
+      graphql: 16.6.0
+      tslib: 2.4.0
+    dev: false
+
   /@graphql-typed-document-node/core/3.1.1_graphql@16.6.0:
     resolution: {integrity: sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==}
     peerDependencies:
@@ -997,7 +1009,6 @@ packages:
     dependencies:
       graphql: 16.6.0
     dev: false
-    optional: true
 
   /@humanwhocodes/config-array/0.11.6:
     resolution: {integrity: sha512-jJr+hPTJYKyDILJfhNSHsjiwXYf26Flsz8DvNndOsHs5pwSnpGUEy8yzF0JYhCEvTDdV2vuOK5tt8BVhwO5/hg==}
@@ -2394,6 +2405,7 @@ packages:
   /apollo-server-errors/3.3.1_graphql@16.6.0:
     resolution: {integrity: sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==}
     engines: {node: '>=12.0'}
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
     dependencies:

@@ -2,9 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""article """
+type Article {
+  createdDate: DateTime!
+  expirationDate: DateTime
+  id: ID!
+  location: Location!
+  product: Product!
+  quantity: Float!
+  started: Boolean
+}
+
 """category """
 type Category {
   color: String
+  id: ID!
+  name: String!
+}
+
+"""content_unit"""
+type ContentUnit {
   id: ID!
   name: String!
 }
@@ -22,6 +39,14 @@ input CreateProductInput {
   servingSize: String!
 }
 
+input CreateUserProductSettingsInput {
+  categoryIds: String!
+  contentUnitId: Float!
+  locationId: String!
+  productEan: String!
+  userId: Float!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -36,16 +61,6 @@ input FetchProductsArgs {
   withFoods: Boolean = false
 }
 
-"""food """
-type Food {
-  createdDate: DateTime!
-  expirationDate: String
-  id: ID!
-  location: Location!
-  product: Product!
-  started: Boolean
-}
-
 """Location """
 type Location {
   id: ID!
@@ -54,19 +69,21 @@ type Location {
 
 type Mutation {
   createProduct(createProductInput: CreateProductInput!): Product!
+  createUserProductSettings(createUserProductSettingsInput: CreateUserProductSettingsInput!): UserProductSettings!
 }
 
 """product """
 type Product {
+  articles: [Article!]
   brand: String
   categories: [Category!]
   ean: ID!
-  foods: [Food!]
   genericName: String
   imageSmallUrl: String
   imageUrl: String
   ingredients: String
   name: String!
+  newlyAdded: Boolean!
   nutriscoreGrade: String
   quantity: String
   servingSize: String
@@ -75,8 +92,10 @@ type Product {
 type Query {
   findAllCategories: [Category!]!
   findAllLocations: [Location!]!
+  findAllUnits: [ContentUnit!]!
+  findByProductAndUser(ean: String!, idUser: Float!): UserProductSettings!
   findOneProduct(ean: String!): Product!
-  findOneUser(id: String!): User!
+  findOneUser(id: Float!): User!
   findProductByCategories(categories: String!): [Product!]!
   findProducts(fetchProductsArgs: FetchProductsArgs!): [Product!]!
 }
@@ -87,4 +106,14 @@ type User {
   firstName: String
   id: ID!
   lastName: String
+}
+
+"""userProductSettings"""
+type UserProductSettings {
+  categoryIds: String
+  contentUnit: ContentUnit!
+  id: ID!
+  location: Location!
+  product: Product!
+  user: User!
 }
