@@ -13,6 +13,11 @@ import { Location } from '../location/location.entity';
 
 @ObjectType({ description: 'article ' })
 @Entity()
+/*@Index('article_unique', ['product', 'location', 'expirationDate'], {
+  unique: true,
+  where:
+    '((expirationDate IS NULL) OR (expirationDate IS NOT NULL AND (productEAN, locationId, expirationDate) NOT IN (SELECT productEAN, locationId, expirationDate FROM article WHERE expirationDate IS NOT NULL)))',
+})*/
 @Unique(['expirationDate', 'location', 'product'])
 export class Article {
   @Field(() => ID)

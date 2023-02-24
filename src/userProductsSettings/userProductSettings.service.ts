@@ -27,6 +27,7 @@ export class UserProductSettingsService {
       return await this.userProductSettingsRepository
         .createQueryBuilder('userProductSettings')
         .leftJoinAndSelect('userProductSettings.location', 'location')
+        .leftJoinAndSelect('userProductSettings.product', 'product')
         .leftJoinAndSelect('userProductSettings.contentUnit', 'contentUnit')
         .where('userProductSettings.user.id = :idUser', { idUser })
         .andWhere('userProductSettings.product.ean = :ean', { ean })

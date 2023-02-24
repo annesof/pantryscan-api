@@ -11,9 +11,6 @@ export class CreateArticleInput {
   @Field({ nullable: true })
   expirationDate?: Date;
 
-  @Field({ nullable: true })
-  packaging?: string;
-
   @Field()
   quantity: number;
 }

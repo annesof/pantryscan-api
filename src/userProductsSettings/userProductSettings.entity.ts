@@ -29,6 +29,10 @@ export class UserProductSettings {
   contentUnit: ContentUnit;
 
   @Column({ nullable: true })
-  @Field({ nullable: true })
   categoryIds: string;
+
+  @Field(() => [String])
+  get categories(): string[] {
+    return this.categoryIds.split(',');
+  }
 }

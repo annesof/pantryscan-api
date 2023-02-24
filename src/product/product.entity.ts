@@ -2,14 +2,11 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   Column,
   Entity,
-  ManyToMany,
-  JoinTable,
   PrimaryColumn,
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Category } from '../category/category.entity';
 import { Article } from '../article/article.entity';
 
 @ObjectType({ description: 'product ' })
@@ -50,15 +47,6 @@ export class Product {
   @Column({ nullable: true })
   @Field({ nullable: true })
   quantity?: string;
-
-  @Column({ nullable: true })
-  @Field({ nullable: true })
-  servingSize?: string;
-
-  @ManyToMany(() => Category, (category) => category.products)
-  @JoinTable()
-  @Field(() => [Category], { nullable: true }) //important to be array
-  categories?: Category[];
 
   @OneToMany(() => Article, (food) => food.product, { eager: true })
   @Field(() => [Article], { nullable: true })

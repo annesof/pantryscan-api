@@ -38,16 +38,6 @@ export class ProductService {
     }
   }
 
-  async findProductsByCategories(categories: string): Promise<Product[]> {
-    //const filters = categories.split(',');
-    const result = await this.productRepository
-      .createQueryBuilder('product')
-      .innerJoin('product.categories', 'category')
-      .where('category.id in (:name)', { name: categories })
-      .getMany();
-    return result;
-  }
-
   private async findAndCreateExternalProduct(
     ean: string,
   ): Promise<Product | { ean: string; name: string }> {
@@ -102,10 +92,10 @@ export class ProductService {
     let query = this.productRepository.createQueryBuilder('product');
 
     fetchProductsInput.withFoods
-      ? query.innerJoinAndSelect('product.foods', 'food')
-      : query.leftJoinAndSelect('product.foods', 'food');
+      ? query.innerJoinAndSelect('product.articles', 'article')
+      : query.leftJoinAndSelect('product.articles', 'article');
 
-    query.leftJoinAndSelect('food.location', 'location');
+    query.leftJoinAndSelect('article.location', 'location');
     if (fetchProductsInput.categories) {
       fetchProductsInput.categories?.split(',').forEach((categoryId, index) => {
         query = query
@@ -167,8 +157,8 @@ export class ProductService {
     return await this.productRepository
       .createQueryBuilder('product')
       .leftJoin('product.categories', 'category')
-      .leftJoinAndSelect('product.foods', 'food')
-      .leftJoinAndSelect('food.location', 'location')
+      .leftJoinAndSelect('product.articles', 'article')
+      .leftJoinAndSelect('article.location', 'location')
       .where('category.id IS NULL')
       .andWhere(
         fetchProductsInput.location ? 'location.id = (:locationId)' : '1=1',

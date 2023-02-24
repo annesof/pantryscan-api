@@ -3,42 +3,37 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Article } from './article.entity';
 import { CreateArticleInput } from './dto/create-article.input';
-import { LocationService } from 'src/location/location.service';
-import { ProductService } from 'src/product/product.service';
+import { Location } from 'src/location/location.entity';
+import { Product } from 'src/product/product.entity';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article)
     private articleRepository: Repository<Article>,
-    private locationService: LocationService,
-    private productService: ProductService,
   ) {}
 
   async create(createArticleInput: CreateArticleInput): Promise<Article> {
     const { eanProduct, idLocation, expirationDate, quantity } =
       createArticleInput;
+    const location = new Location();
+    location.id = idLocation;
 
-    const location = await this.locationService.findOne(idLocation);
-    const product = await this.productService.findOne(eanProduct);
-
-    if (!product) {
-      throw new Error('Product not found');
-    }
-
-    if (!location) {
-      throw new Error('Location not found');
-    }
-
+    const product = new Product();
+    product.ean = eanProduct;
     const article = new Article();
     article.expirationDate = expirationDate
       ? new Date(expirationDate)
       : undefined;
     article.quantity = quantity;
-    article.product = product;
-    article.location = location;
 
-    return this.articleRepository.save(article);
+    const articleToSave = this.articleRepository.create({
+      ...article,
+      location,
+      product,
+    });
+
+    return this.articleRepository.save(articleToSave);
   }
 
   async updateQuantity(id: number, quantity?: number): Promise<Article> {
@@ -85,7 +80,8 @@ export class ArticleService {
   async findByProduct(ean: string): Promise<Article[]> {
     return await this.articleRepository
       .createQueryBuilder('article')
-      .where('product.ean = :ean', { ean })
+      .leftJoinAndSelect('article.location', 'location')
+      .where('article.product.ean = :ean', { ean })
       .getMany();
   }
 
