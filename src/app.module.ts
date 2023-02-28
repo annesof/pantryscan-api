@@ -45,6 +45,9 @@ import { UserProductSettingsModule } from './userProductsSettings/userProductSet
       playground: true,
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      buildSchemaOptions: {
+        dateScalarMode: 'timestamp',
+      },
       sortSchema: true,
     }),
     LocationModule,

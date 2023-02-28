@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { GraphQLErrorFilter } from './filters/graphql-exception.filter';
 import { TypeORMExceptionFilter } from './filters/typeorm-exception.filter';
 
 async function bootstrap() {

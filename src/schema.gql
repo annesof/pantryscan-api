@@ -4,8 +4,8 @@
 
 """article """
 type Article {
-  createdDate: DateTime!
-  expirationDate: DateTime
+  createdDate: Timestamp!
+  expirationDate: Timestamp
   id: ID!
   location: Location!
   product: Product!
@@ -28,7 +28,7 @@ type ContentUnit {
 
 input CreateArticleInput {
   eanProduct: String!
-  expirationDate: DateTime
+  expirationDate: Timestamp
   idLocation: String!
   quantity: Float!
 }
@@ -53,11 +53,6 @@ input CreateUserProductSettingsInput {
   productEan: String!
   userId: Float!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 input FetchProductsArgs {
   categories: String
@@ -105,6 +100,11 @@ type Query {
   findOneUser(id: Float!): User!
   findProducts(fetchProductsArgs: FetchProductsArgs!): [Product!]!
 }
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
 
 """user """
 type User {
