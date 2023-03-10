@@ -82,6 +82,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.location', 'location')
       .where('article.product.ean = :ean', { ean })
+      .orderBy({ 'location.id': 'ASC', 'article.expirationDate': 'ASC' })
       .getMany();
   }
 

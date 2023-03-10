@@ -1,9 +1,21 @@
 version: '3.6'
 services:
-  #node:
-  #build: .
-  # volumes:
-  #   - .:/app
+  node:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    #image: pantryscan_api:v3
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    environment:
+      - PROD_DB_USERNAME=api
+      - PROD_DB_PASSWORD=development_pass
+      - PROD_DB_NAME=pantryscan-api
+      - PROD_DB_HOSTNAME=postgres
+      - NODE_ENV=production
   postgres:
     image: postgres
     restart: unless-stopped

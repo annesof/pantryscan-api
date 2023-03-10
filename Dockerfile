@@ -1,24 +1,25 @@
-FROM node:16
+FROM node:18 As development
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
-COPY package.json pnpm-lock.yaml /app/
+COPY --chown=node:node package.json pnpm-lock.yaml ./
 
-RUN pnpm install && \
-    rm -rf /tmp/* /var/tmp/*
+RUN pnpm i 
+#&& \
+#    rm -rf /tmp/* /var/tmp/*
 
-COPY ./docker-utils/entrypoint/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+#COPY ./docker-utils/entrypoint/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-COPY . /app
+COPY --chown=node:node . .
 
-RUN pnpm build
+RUN pnpm run build
 
 EXPOSE 3000
 
 USER node
 
-ENV TYPEORM_MIGRATION=ENABLE
+ENV TYPEORM_MIGRATION=DISABLE
 ENV NPM_INSTALL=DISABLE
 CMD pnpm start:prod

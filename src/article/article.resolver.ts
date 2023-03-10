@@ -17,7 +17,7 @@ export class ArticleResolver {
   }
 
   @Mutation(() => Article, { name: 'createArticle' })
-  createProductPreferences(
+  createArticle(
     @Args('createArticleInput')
     createArticleInput: CreateArticleInput,
   ) {

@@ -13,10 +13,10 @@ import { LocationModule } from './location/location.module';
 import { ContentUnitModule } from './contentUnit/contentUnit.module';
 import { UserModule } from './user/user.module';
 import { UserProductSettingsModule } from './userProductsSettings/userProductSettings.module';
-
+import databaseConf from 'database.conf';
 @Module({
   imports: [
-    ConfigModule.forRoot({}),
+    ConfigModule.forRoot({ load: [databaseConf] }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -25,23 +25,23 @@ import { UserProductSettingsModule } from './userProductsSettings/userProductSet
           name: 'default',
           type: 'postgres',
           logging: true,
-          url: configService.get('DATABASE_URL'),
+          url: `postgres://${configService.get(
+            'db.username',
+          )}:${configService.get('db.password')}@${configService.get(
+            'db.host',
+          )}:5432/${configService.get('db.name')}`,
           autoLoadEntities: true,
-          /*entities: [
-            __dirname + '/contentUnit/contentUnit.entity.ts',
-            __dirname + '/category/category.entity.ts',
-            __dirname + '/location/location.entity.ts',
-            __dirname + '/article/article.entity.ts',
-            __dirname + '/product/product.entity.ts',
-            __dirname + '/user/user.entity.ts',
-          ],*/
-          migrations: ['dist/src/migrations/*{.ts,.js}'],
           synchronize: true,
+          migrations: ['dist/src/migrations/*{.ts,.js}'],
           migrationsRun: true,
         } as TypeOrmModuleAsyncOptions;
       },
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      cors: {
+        origin: 'http://localhost:5173',
+        credentials: true,
+      },
       playground: true,
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
