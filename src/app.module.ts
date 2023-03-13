@@ -21,6 +21,13 @@ import databaseConf from 'database.conf';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
+        console.log(
+          `postgres://${configService.get('db.username')}:${configService.get(
+            'db.password',
+          )}@${configService.get('db.host')}:5432/${configService.get(
+            'db.name',
+          )}`,
+        );
         return {
           name: 'default',
           type: 'postgres',
@@ -33,7 +40,7 @@ import databaseConf from 'database.conf';
           autoLoadEntities: true,
           synchronize: true,
           migrations: ['dist/src/migrations/*{.ts,.js}'],
-          migrationsRun: true,
+          //migrationsRun: true,
         } as TypeOrmModuleAsyncOptions;
       },
     }),

@@ -36,11 +36,16 @@ export class ArticleService {
     return this.articleRepository.save(articleToSave);
   }
 
-  async updateQuantity(id: number, quantity?: number): Promise<Article> {
+  async updateArticle(
+    id: number,
+    quantity: number,
+    expirationDate?: Date | null,
+  ): Promise<Article> {
     const article = await this.articleRepository.findOneOrFail({
       where: { id },
     });
     article.quantity = quantity;
+    article.expirationDate = expirationDate;
     return this.articleRepository.save(article);
   }
 
@@ -48,12 +53,14 @@ export class ArticleService {
     id: number,
     quantity: number,
     idNewLocation: string,
-  ): Promise<void> {
-    const articleToRemove = await this.articleRepository.findOneOrFail({
-      where: { id },
-    });
+  ): Promise<Article> {
+    const articleToRemove = await this.findArticleWithProduct(id);
     articleToRemove.quantity -= quantity;
-    await this.articleRepository.save(articleToRemove);
+    if (articleToRemove.quantity >= 1) {
+      await this.articleRepository.save(articleToRemove);
+    } else {
+      await this.remove(id);
+    }
     const articleToUpdate2 = await this.findByProductLocationAndExpirationDate(
       articleToRemove.product.ean,
       idNewLocation,
@@ -61,7 +68,7 @@ export class ArticleService {
     );
     if (articleToUpdate2) {
       articleToUpdate2.quantity += quantity;
-      await this.articleRepository.save(articleToUpdate2);
+      return await this.articleRepository.save(articleToUpdate2);
     } else {
       const createArticleInput: CreateArticleInput = {
         eanProduct: articleToRemove.product.ean,
@@ -69,12 +76,12 @@ export class ArticleService {
         expirationDate: articleToRemove.expirationDate,
         quantity,
       };
-      await this.create(createArticleInput);
+      return await this.create(createArticleInput);
     }
   }
 
   async remove(id: number) {
-    await this.articleRepository.delete(id);
+    return await this.articleRepository.delete(id);
   }
 
   async findByProduct(ean: string): Promise<Article[]> {
@@ -91,11 +98,28 @@ export class ArticleService {
     idLocation: string,
     expirationDate?: Date,
   ): Promise<Article> {
+    const queryBuilder = this.articleRepository
+      .createQueryBuilder('article')
+      .leftJoin('article.product', 'product')
+      .leftJoin('article.location', 'location')
+      .where('product.ean = :ean', { ean })
+      .andWhere('location.id = :idLocation', { idLocation });
+    if (expirationDate === null || expirationDate === undefined) {
+      queryBuilder.andWhere('article.expirationDate IS NULL');
+    } else {
+      queryBuilder.andWhere('article.expirationDate = :expirationDate', {
+        expirationDate,
+      });
+    }
+
+    return await queryBuilder.getOne();
+  }
+
+  private async findArticleWithProduct(id: number): Promise<Article> {
     return await this.articleRepository
       .createQueryBuilder('article')
-      .where('product.ean = :ean', { ean })
-      .andWhere('location.id = :idLocation', { idLocation })
-      .andWhere('expirationDate = :expirationDate', { expirationDate })
+      .leftJoinAndSelect('article.product', 'product')
+      .where('article.id = :id', { id })
       .getOne();
   }
 }

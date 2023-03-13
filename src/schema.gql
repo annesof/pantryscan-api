@@ -13,6 +13,11 @@ type Article {
   started: Boolean
 }
 
+type ArticleOrBoolean {
+  article: Article
+  boolean: Boolean
+}
+
 """category """
 type Category {
   color: String
@@ -57,9 +62,9 @@ input CreateUserProductSettingsInput {
 input FetchProductsArgs {
   categories: String
   location: String
-  skip: Int = 0
+  skip: Int! = 0
   sortBy: String = "NAME"
-  take: Int = 10
+  take: Int! = 10
   withFoods: Boolean = false
 }
 
@@ -73,7 +78,9 @@ type Mutation {
   createArticle(createArticleInput: CreateArticleInput!): Article!
   createProduct(createProductInput: CreateProductInput!): Product!
   createUserProductSettings(createUserProductSettingsInput: CreateUserProductSettingsInput!): UserProductSettings!
-  updateArticle(id: Float!): Article!
+  deleteArticle(id: Float!): Boolean!
+  switchArticleLocation(switchArticleInput: SwitchArticleInput!): Article!
+  updateArticle(updateArticleInput: UpdateArticleInput!): ArticleOrBoolean!
 }
 
 """product """
@@ -101,10 +108,22 @@ type Query {
   findProducts(fetchProductsArgs: FetchProductsArgs!): [Product!]!
 }
 
+input SwitchArticleInput {
+  id: Float!
+  idLocation: String!
+  quantity: Float!
+}
+
 """
 `Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
 scalar Timestamp
+
+input UpdateArticleInput {
+  expirationDate: Timestamp
+  id: Float!
+  quantity: Float!
+}
 
 """user """
 type User {

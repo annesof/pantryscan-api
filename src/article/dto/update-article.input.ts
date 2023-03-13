@@ -1,11 +1,13 @@
-import { InputType, Field, PartialType } from '@nestjs/graphql';
-import { CreateArticleInput } from './create-article.input';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateArticleInput extends PartialType(CreateArticleInput) {
+export class UpdateArticleInput {
   @Field()
-  id: string;
+  id: number;
+
+  @Field({ nullable: true })
+  expirationDate?: Date;
 
   @Field()
-  started?: boolean;
+  quantity: number;
 }
