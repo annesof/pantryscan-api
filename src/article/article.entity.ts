@@ -6,26 +6,37 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 import { Product } from '../product/product.entity';
 import { Location } from '../location/location.entity';
 
-@ObjectType({ description: 'food ' })
+@ObjectType({ description: 'article ' })
 @Entity()
-export class Food {
+/*@Index('article_unique', ['product', 'location', 'expirationDate'], {
+  unique: true,
+  where:
+    '((expirationDate IS NULL) OR (expirationDate IS NOT NULL AND (productEAN, locationId, expirationDate) NOT IN (SELECT productEAN, locationId, expirationDate FROM article WHERE expirationDate IS NOT NULL)))',
+})*/
+@Unique(['expirationDate', 'location', 'product'])
+export class Article {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  expirationDate?: string;
+  expirationDate?: Date;
+
+  @Column()
+  @Field()
+  quantity: number;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  started?: boolean;
+  started?: boolean = false;
 
-  @ManyToOne(() => Product, (product) => product.foods)
+  @ManyToOne(() => Product, (product) => product.articles)
   @Field(() => Product)
   product: Product;
 

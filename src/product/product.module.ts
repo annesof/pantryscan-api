@@ -5,15 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { HttpModule } from '@nestjs/axios';
 import { CategoryModule } from 'src/category/category.module';
-import { FoodModule } from 'src/food/food.module';
+import { ArticleModule } from 'src/article/article.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
     CategoryModule,
+    ArticleModule,
     HttpModule,
-    FoodModule,
   ],
   providers: [ProductResolver, ProductService],
+  exports: [ProductService],
 })
 export class ProductModule {}

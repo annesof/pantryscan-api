@@ -16,7 +16,4 @@ export class Category {
   @Column({ nullable: true })
   @Field({ nullable: true })
   color?: string;
-
-  @ManyToMany(() => Product, (product) => product.categories)
-  products: Promise<Product[]>;
 }

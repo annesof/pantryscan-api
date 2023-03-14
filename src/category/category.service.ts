@@ -13,12 +13,4 @@ export class CategoryService {
   async findAll(): Promise<Category[]> {
     return this.categoryRepository.find();
   }
-
-  async findByProduct(ean: string): Promise<Category[]> {
-    return await this.categoryRepository
-      .createQueryBuilder('category')
-      .innerJoin('category.products', 'product')
-      .where('product.ean = :ean', { ean })
-      .getMany();
-  }
 }

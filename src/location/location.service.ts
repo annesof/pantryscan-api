@@ -19,4 +19,8 @@ export class LocationService {
   async findAll(): Promise<Location[]> {
     return await this.locationRepository.find();
   }
+
+  async findOne(id: string): Promise<Location> {
+    return await this.locationRepository.findOne({ where: { id } });
+  }
 }

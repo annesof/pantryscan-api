@@ -32,31 +32,26 @@ export class ProductService {
         ean,
       });
       if (!result) {
-        return this.findExternalProduct(ean);
+        return this.findAndCreateExternalProduct(ean);
       }
       return result;
     }
   }
 
-  async findProductsByCategories(categories: string): Promise<Product[]> {
-    //const filters = categories.split(',');
-    const result = await this.productRepository
-      .createQueryBuilder('product')
-      .innerJoin('product.categories', 'category')
-      .where('category.id in (:name)', { name: categories })
-      .getMany();
-    return result;
-  }
-
-  private async findExternalProduct(
+  private async findAndCreateExternalProduct(
     ean: string,
   ): Promise<Product | { ean: string; name: string }> {
     if (ean && !ean.startsWith('_')) {
       const { data } = await firstValueFrom(
         this.httpService
-          .get<any>('https://fr.openfoodfacts.org/api/v0/product/' + ean, {
-            headers: { 'User-Agent': 'PantryScan - Web - Version 0.1_alpha' },
-          })
+          .get<any>(
+            'https://fr.openfoodfacts.org/api/v2/product/' +
+              ean +
+              '?fields=quantity,product_name,brands,generic_name_fr,nutriscore_grade,image_front_small_url,image_front_thumb_url',
+            {
+              headers: { 'User-Agent': 'PantryScan - Web - Version 0.1_alpha' },
+            },
+          )
           .pipe(
             catchError(() => {
               //this.logger.error(error.response.data);
@@ -69,18 +64,19 @@ export class ProductService {
           return { ean: data.code, name: 'notfound' };
         } else {
           const toSave = {
-            ean: data.product.code,
+            ean: data.code,
             name: data.product.product_name,
             brand: data.product.brands,
             genericName: data.product.generic_name_fr,
-            ingredients: data.product.ingredients_text,
-            imageUrl: data.product.image_url,
-            imageSmallUrl: data.product.image_small_url,
+            //ingredients: data.product.ingredients_text,
+            imageUrl: data.product.image_front_small_url,
+            imageSmallUrl: data.product.image_front_thumb_url,
             nutriscoreGrade: data.product.nutriscore_grade,
             quantity: data.product.quantity,
-            servingSize: data.product.serving_size,
+            //servingSize: data.product.serving_size,
           };
           const created = await this.create(toSave);
+          created.newlyAdded = true;
           return created;
         }
       } catch (err) {
@@ -96,10 +92,10 @@ export class ProductService {
     let query = this.productRepository.createQueryBuilder('product');
 
     fetchProductsInput.withFoods
-      ? query.innerJoinAndSelect('product.foods', 'food')
-      : query.leftJoinAndSelect('product.foods', 'food');
+      ? query.innerJoinAndSelect('product.articles', 'article')
+      : query.leftJoinAndSelect('product.articles', 'article');
 
-    query.leftJoinAndSelect('food.location', 'location');
+    query.leftJoinAndSelect('article.location', 'location');
     if (fetchProductsInput.categories) {
       fetchProductsInput.categories?.split(',').forEach((categoryId, index) => {
         query = query
@@ -161,8 +157,8 @@ export class ProductService {
     return await this.productRepository
       .createQueryBuilder('product')
       .leftJoin('product.categories', 'category')
-      .leftJoinAndSelect('product.foods', 'food')
-      .leftJoinAndSelect('food.location', 'location')
+      .leftJoinAndSelect('product.articles', 'article')
+      .leftJoinAndSelect('article.location', 'location')
       .where('category.id IS NULL')
       .andWhere(
         fetchProductsInput.location ? 'location.id = (:locationId)' : '1=1',

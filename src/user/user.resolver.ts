@@ -7,7 +7,7 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => User, { name: 'findOneUser' })
-  findUserById(@Args('id', { type: () => String }) id: string) {
+  findUserById(@Args('id', { type: () => Number }) id: number) {
     return this.userService.findById(id);
   }
 }

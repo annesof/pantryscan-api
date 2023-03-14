@@ -2,11 +2,40 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""article """
+type Article {
+  createdDate: Timestamp!
+  expirationDate: Timestamp
+  id: ID!
+  location: Location!
+  product: Product!
+  quantity: Float!
+  started: Boolean
+}
+
+type ArticleOrBoolean {
+  article: Article
+  boolean: Boolean
+}
+
 """category """
 type Category {
   color: String
   id: ID!
   name: String!
+}
+
+"""content_unit"""
+type ContentUnit {
+  id: ID!
+  name: String!
+}
+
+input CreateArticleInput {
+  eanProduct: String!
+  expirationDate: Timestamp
+  idLocation: String!
+  quantity: Float!
 }
 
 input CreateProductInput {
@@ -22,28 +51,21 @@ input CreateProductInput {
   servingSize: String!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+input CreateUserProductSettingsInput {
+  categoryIds: String!
+  contentUnitId: Float!
+  locationId: String!
+  productEan: String!
+  userId: Float!
+}
 
 input FetchProductsArgs {
   categories: String
   location: String
-  skip: Int = 0
+  skip: Int! = 0
   sortBy: String = "NAME"
-  take: Int = 10
+  take: Int! = 10
   withFoods: Boolean = false
-}
-
-"""food """
-type Food {
-  createdDate: DateTime!
-  expirationDate: String
-  id: ID!
-  location: Location!
-  product: Product!
-  started: Boolean
 }
 
 """Location """
@@ -53,32 +75,54 @@ type Location {
 }
 
 type Mutation {
+  createArticle(createArticleInput: CreateArticleInput!): Article!
   createProduct(createProductInput: CreateProductInput!): Product!
+  createUserProductSettings(createUserProductSettingsInput: CreateUserProductSettingsInput!): UserProductSettings!
+  deleteArticle(id: Float!): Boolean!
+  switchArticleLocation(switchArticleInput: SwitchArticleInput!): Article!
+  updateArticle(updateArticleInput: UpdateArticleInput!): ArticleOrBoolean!
 }
 
 """product """
 type Product {
+  articles: [Article!]
   brand: String
-  categories: [Category!]
   ean: ID!
-  foods: [Food!]
   genericName: String
   imageSmallUrl: String
   imageUrl: String
   ingredients: String
   name: String!
+  newlyAdded: Boolean!
   nutriscoreGrade: String
   quantity: String
-  servingSize: String
 }
 
 type Query {
   findAllCategories: [Category!]!
   findAllLocations: [Location!]!
+  findAllUnits: [ContentUnit!]!
+  findByProductAndUser(ean: String!, idUser: Float!): UserProductSettings!
   findOneProduct(ean: String!): Product!
-  findOneUser(id: String!): User!
-  findProductByCategories(categories: String!): [Product!]!
+  findOneUser(id: Float!): User!
   findProducts(fetchProductsArgs: FetchProductsArgs!): [Product!]!
+}
+
+input SwitchArticleInput {
+  id: Float!
+  idLocation: String!
+  quantity: Float!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+input UpdateArticleInput {
+  expirationDate: Timestamp
+  id: Float!
+  quantity: Float!
 }
 
 """user """
@@ -87,4 +131,14 @@ type User {
   firstName: String
   id: ID!
   lastName: String
+}
+
+"""userProductSettings"""
+type UserProductSettings {
+  categories: [String!]!
+  contentUnit: ContentUnit!
+  id: ID!
+  location: Location!
+  product: Product!
+  user: User!
 }
