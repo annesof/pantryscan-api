@@ -5,10 +5,9 @@ import { Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { catchError, firstValueFrom } from 'rxjs';
-import { FetchProductsArgs } from './dto/fetch-products.args';
 
 const FIELDS = {
-  DATE: { field: 'food.createdDate', asc: false },
+  DATE: { field: 'article.createdDate', asc: false },
   NAME: { field: 'product.name', asc: true },
   BRAND: { field: 'product.brand', asc: true },
 };
