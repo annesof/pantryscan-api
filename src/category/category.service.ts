@@ -13,4 +13,13 @@ export class CategoryService {
   async findAll(): Promise<Category[]> {
     return this.categoryRepository.find();
   }
+
+  async findByIds(ids: number[]): Promise<Category[]> {
+    return this.categoryRepository
+      .createQueryBuilder('category')
+      .where('category.id IN (:...ids)', {
+        ids,
+      })
+      .getMany();
+  }
 }

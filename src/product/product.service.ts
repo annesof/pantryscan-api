@@ -86,88 +86,37 @@ export class ProductService {
     }
   }
 
-  async findProductsByLocationAndCategories(
-    fetchProductsInput: FetchProductsArgs,
+  async findProductsByLocationAndUser(
+    withFoods: boolean,
+    locationId: string,
+    userId: number,
+    sortBy: string,
+    skip: number,
+    take: number,
   ): Promise<Product[]> {
-    let query = this.productRepository.createQueryBuilder('product');
+    const query = this.productRepository.createQueryBuilder('product');
 
-    fetchProductsInput.withFoods
+    withFoods
       ? query.innerJoinAndSelect('product.articles', 'article')
       : query.leftJoinAndSelect('product.articles', 'article');
 
     query.leftJoinAndSelect('article.location', 'location');
-    if (fetchProductsInput.categories) {
-      fetchProductsInput.categories?.split(',').forEach((categoryId, index) => {
-        query = query
-          .innerJoin(
-            `product.categories`,
-            `category${index}`,
-            `category${index}.id = :categoryId${index}`,
-            { [`categoryId${index}`]: categoryId },
-          )
-          .where(
-            `${fetchProductsInput.categories
-              ?.split(',')
-              .map((_, index) => `category${index}.id = :categoryId${index}`)
-              .join(' AND ')}`,
-          );
-      });
-    }
+    query.leftJoinAndSelect('article.user', 'user');
+    query.leftJoinAndSelect(
+      'product.userProductSettings',
+      'userProductSettings',
+    );
 
     return await query
-      .andWhere(
-        fetchProductsInput.location ? 'location.id = (:locationId)' : '1=1',
-        {
-          locationId: fetchProductsInput.location,
-        },
-      )
-      .orderBy(
-        FIELDS[fetchProductsInput.sortBy].field,
-        FIELDS[fetchProductsInput.sortBy].asc ? 'ASC' : 'DESC',
-      )
-      .skip(fetchProductsInput.skip)
-      .take(fetchProductsInput.take)
-      .getMany();
-    /*return await this.productRepository
-      .createQueryBuilder('product')
-      .leftJoin('product.categories', 'category')
-      .leftJoinAndSelect('product.foods', 'food')
-      .leftJoinAndSelect('food.location', 'location')
-      .where(
-        fetchProductsInput.categories ? 'category.id IN (:...ids)' : '1=1',
-        {
-          ids: fetchProductsInput.categories?.split(',').map(Number),
-        },
-      )
-      .andWhere(
-        fetchProductsInput.location ? 'location.id = (:locationId)' : '1=1',
-        {
-          locationId: fetchProductsInput.location,
-        },
-      )
-      .skip(fetchProductsInput.skip)
-      .take(fetchProductsInput.take)
-      .orderBy('food.createdDate', 'DESC')
-      .getMany();*/
-  }
-
-  async findProductsWithNoCategory(
-    fetchProductsInput: FetchProductsArgs,
-  ): Promise<Product[]> {
-    return await this.productRepository
-      .createQueryBuilder('product')
-      .leftJoin('product.categories', 'category')
-      .leftJoinAndSelect('product.articles', 'article')
-      .leftJoinAndSelect('article.location', 'location')
-      .where('category.id IS NULL')
-      .andWhere(
-        fetchProductsInput.location ? 'location.id = (:locationId)' : '1=1',
-        {
-          locationId: fetchProductsInput.location,
-        },
-      )
-      .skip(fetchProductsInput.skip)
-      .take(fetchProductsInput.take)
+      .andWhere(locationId ? 'location.id = (:locationId)' : '1=1', {
+        locationId,
+      })
+      .andWhere('user.id = (:userId)', {
+        userId,
+      })
+      .orderBy(FIELDS[sortBy].field, FIELDS[sortBy].asc ? 'ASC' : 'DESC')
+      .skip(skip)
+      .take(take)
       .getMany();
   }
 }

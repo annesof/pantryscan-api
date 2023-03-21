@@ -5,6 +5,7 @@ import { Article } from './article.entity';
 import { CreateArticleInput } from './dto/create-article.input';
 import { Location } from 'src/location/location.entity';
 import { Product } from 'src/product/product.entity';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class ArticleService {
@@ -14,10 +15,13 @@ export class ArticleService {
   ) {}
 
   async create(createArticleInput: CreateArticleInput): Promise<Article> {
-    const { eanProduct, idLocation, expirationDate, quantity } =
+    const { eanProduct, idLocation, expirationDate, quantity, idUser } =
       createArticleInput;
     const location = new Location();
     location.id = idLocation;
+
+    const user = new User();
+    user.id = idUser;
 
     const product = new Product();
     product.ean = eanProduct;
@@ -31,6 +35,7 @@ export class ArticleService {
       ...article,
       location,
       product,
+      user,
     });
 
     return this.articleRepository.save(articleToSave);
@@ -75,6 +80,7 @@ export class ArticleService {
         idLocation: idNewLocation,
         expirationDate: articleToRemove.expirationDate,
         quantity,
+        idUser: articleToRemove.user.id,
       };
       return await this.create(createArticleInput);
     }

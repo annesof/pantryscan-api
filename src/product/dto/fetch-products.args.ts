@@ -19,4 +19,7 @@ export class FetchProductsArgs {
 
   @Field({ nullable: true })
   sortBy?: string = 'NAME';
+
+  @Field()
+  userId?: number;
 }

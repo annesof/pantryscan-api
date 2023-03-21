@@ -13,4 +13,7 @@ export class CreateArticleInput {
 
   @Field()
   quantity: number;
+
+  @Field()
+  idUser: number;
 }

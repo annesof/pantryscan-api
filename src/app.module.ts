@@ -14,6 +14,7 @@ import { ContentUnitModule } from './contentUnit/contentUnit.module';
 import { UserModule } from './user/user.module';
 import { UserProductSettingsModule } from './userProductsSettings/userProductSettings.module';
 import databaseConf from 'database.conf';
+import { ProductUserProductSettingsModule } from './userProductsSettings/ProductUserProductSettings.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ load: [databaseConf] }),
@@ -40,7 +41,7 @@ import databaseConf from 'database.conf';
           autoLoadEntities: true,
           synchronize: true,
           migrations: ['dist/src/migrations/*{.ts,.js}'],
-          //migrationsRun: true,
+          migrationsRun: true,
         } as TypeOrmModuleAsyncOptions;
       },
     }),
@@ -64,6 +65,7 @@ import databaseConf from 'database.conf';
     ProductModule,
     ArticleModule,
     UserProductSettingsModule,
+    ProductUserProductSettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
