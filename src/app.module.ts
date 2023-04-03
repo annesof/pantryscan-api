@@ -41,7 +41,7 @@ import { ProductUserProductSettingsModule } from './userProductsSettings/Product
           autoLoadEntities: true,
           synchronize: true,
           migrations: ['dist/src/migrations/*{.ts,.js}'],
-          migrationsRun: true,
+          //migrationsRun: true,
         } as TypeOrmModuleAsyncOptions;
       },
     }),
