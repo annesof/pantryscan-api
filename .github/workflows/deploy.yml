@@ -3,7 +3,7 @@ name: 'deploy'
 on:
   push:
     branches:
-      - PSCAN-4-search-product
+      - master
 
 jobs:
   deploy:

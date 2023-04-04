@@ -125,6 +125,7 @@ export class ArticleService {
     return await this.articleRepository
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.product', 'product')
+      .leftJoinAndSelect('article.user', 'user')
       .where('article.id = :id', { id })
       .getOne();
   }
