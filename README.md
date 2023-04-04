@@ -1,43 +1,25 @@
-## TODO
+## PantryScan Graphql API 🔥
 
 Watch for Integrate Apollo Server 4 in nestJS
 
-## Description
+needs a postgres database
 
-Pantryscan graphQL API
+## Features
+
+- ✅ [Apollo Server](https://www.apollographql.com/docs/apollo-server/v3/) `v3`
+- ✅ [NestJs](https://nestjs.com/) `v9`
+- ✅ [TypeScript](https://www.typescriptlang.org/)
+- ✅ [TypeOrm](https://typeorm.io/)
 
 ## Installation
 
 ```bash
-$ npm install
+$ pnpm i
 ```
 
 ## Running the app
 
 ```bash
 # development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ pnpm run start
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## License
-
-[MIT licensed](LICENSE).

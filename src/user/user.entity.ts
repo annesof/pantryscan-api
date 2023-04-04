@@ -7,7 +7,6 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Category } from '../category/category.entity';
-
 @ObjectType({ description: 'user ' })
 @Entity()
 export class User {

@@ -11,6 +11,7 @@ type Article {
   product: Product!
   quantity: Float!
   started: Boolean
+  user: User!
 }
 
 type ArticleOrBoolean {
@@ -35,6 +36,7 @@ input CreateArticleInput {
   eanProduct: String!
   expirationDate: Timestamp
   idLocation: String!
+  idUser: Float!
   quantity: Float!
 }
 
@@ -65,6 +67,7 @@ input FetchProductsArgs {
   skip: Int! = 0
   sortBy: String = "NAME"
   take: Int! = 10
+  userId: Float!
   withFoods: Boolean = false
 }
 
@@ -96,6 +99,7 @@ type Product {
   newlyAdded: Boolean!
   nutriscoreGrade: String
   quantity: String
+  userProductSettings: [UserProductSettings!]
 }
 
 type Query {
@@ -135,7 +139,7 @@ type User {
 
 """userProductSettings"""
 type UserProductSettings {
-  categories: [String!]!
+  categories: [Category!]
   contentUnit: ContentUnit!
   id: ID!
   location: Location!

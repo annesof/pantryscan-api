@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Article } from '../article/article.entity';
+import { UserProductSettings } from 'src/userProductsSettings/userProductSettings.entity';
 
 @ObjectType({ description: 'product ' })
 @Entity()
@@ -60,4 +61,8 @@ export class Product {
 
   @Field({ defaultValue: false })
   newlyAdded?: boolean;
+
+  @OneToMany(() => UserProductSettings, (settings) => settings.product)
+  @Field(() => [UserProductSettings], { nullable: true })
+  userProductSettings?: UserProductSettings[];
 }

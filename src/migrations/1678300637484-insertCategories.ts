@@ -27,7 +27,7 @@ export class insertCategories1678300637484 implements MigrationInterface {
       "INSERT INTO category (name,color) VALUES ('Dessert', NULL), ('Vin', NULL), ('Boeuf', '#ef9a9a'), ('Porc', '#ef9a9a')",
     );
     queryRunner.query(
-      "INSERT INTO category (name,color) VALUES ('Grilades', NULL), ('Céréale', '#fff59d'), ('Epicerie sucrée', NULL), ('Couscous', '#fff59d')",
+      "INSERT INTO category (name,color) VALUES ('Grillades', NULL), ('Céréale', '#fff59d'), ('Epicerie sucrée', NULL), ('Couscous', '#fff59d')",
     );
   }
 

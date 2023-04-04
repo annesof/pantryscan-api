@@ -1,9 +1,16 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { ContentUnit } from 'src/contentUnit/contentUnit.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Product } from '../product/product.entity';
 import { Location } from 'src/location/location.entity';
 import { User } from 'src/user/user.entity';
+import { Category } from 'src/category/category.entity';
 
 @ObjectType({ description: 'userProductSettings' })
 @Entity()
@@ -12,12 +19,15 @@ export class UserProductSettings {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => Product, { eager: true, nullable: false })
-  @Field()
+  @ManyToOne(() => Product, {
+    eager: true,
+    nullable: false,
+  })
+  @Field(() => Product)
   product: Product;
 
   @ManyToOne(() => User, { nullable: false })
-  @Field()
+  @Field(() => User)
   user: User;
 
   @ManyToOne(() => Location, { eager: true, nullable: false })
@@ -28,11 +38,16 @@ export class UserProductSettings {
   @Field()
   contentUnit: ContentUnit;
 
-  @Column({ nullable: true })
-  categoryIds: string;
+  @ManyToMany(() => Category, { eager: true })
+  @JoinTable()
+  @Field(() => [Category], { nullable: true })
+  categories?: Category[];
 
-  @Field(() => [String])
+  /*@Column({ nullable: true })
+  categoryIds: string;*/
+
+  /*@Field(() => [String])
   get categories(): string[] {
     return this.categoryIds.split(',');
-  }
+  }*/
 }

@@ -6,19 +6,13 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
-  Unique,
 } from 'typeorm';
 import { Product } from '../product/product.entity';
 import { Location } from '../location/location.entity';
+import { User } from '../user/user.entity';
 
 @ObjectType({ description: 'article ' })
 @Entity()
-/*@Index('article_unique', ['product', 'location', 'expirationDate'], {
-  unique: true,
-  where:
-    '((expirationDate IS NULL) OR (expirationDate IS NOT NULL AND (productEAN, locationId, expirationDate) NOT IN (SELECT productEAN, locationId, expirationDate FROM article WHERE expirationDate IS NOT NULL)))',
-})*/
-@Unique(['expirationDate', 'location', 'product'])
 export class Article {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
@@ -43,6 +37,10 @@ export class Article {
   @ManyToOne(() => Location, { eager: true })
   @Field()
   location: Location;
+
+  @ManyToOne(() => User, { eager: true })
+  @Field()
+  user: User;
 
   @CreateDateColumn()
   @Field()

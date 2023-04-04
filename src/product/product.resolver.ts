@@ -9,7 +9,6 @@ import {
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { CreateProductInput } from './dto/create-product.input';
-import { FetchProductsArgs } from './dto/fetch-products.args';
 import { Article } from 'src/article/article.entity';
 import { ArticleService } from 'src/article/article.service';
 
@@ -17,7 +16,7 @@ import { ArticleService } from 'src/article/article.service';
 export class ProductResolver {
   constructor(
     private readonly productService: ProductService,
-    private readonly articleService: ArticleService,
+    private readonly articleService: ArticleService, //private readonly productUserProductSettingsService: ProductUserProductSettingsService,
   ) {}
 
   @Mutation(() => Product, { name: 'createProduct' })
@@ -30,19 +29,6 @@ export class ProductResolver {
   @Query(() => Product, { name: 'findOneProduct' })
   findOne(@Args('ean', { type: () => String }) id: string) {
     return this.productService.findOne(id);
-  }
-
-  @Query(() => [Product], { name: 'findProducts' })
-  findProducts(
-    @Args('fetchProductsArgs') fetchProductsArgs: FetchProductsArgs,
-  ) {
-    if (fetchProductsArgs.categories === 'NO') {
-      return this.productService.findProductsWithNoCategory(fetchProductsArgs);
-    }
-
-    return this.productService.findProductsByLocationAndCategories(
-      fetchProductsArgs,
-    );
   }
 
   @ResolveField(() => [Article])
