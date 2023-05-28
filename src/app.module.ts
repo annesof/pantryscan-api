@@ -22,13 +22,6 @@ import { ProductUserProductSettingsModule } from './userProductsSettings/Product
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        console.log(
-          `postgres://${configService.get('db.username')}:${configService.get(
-            'db.password',
-          )}@${configService.get('db.host')}:5432/${configService.get(
-            'db.name',
-          )}`,
-        );
         return {
           name: 'default',
           type: 'postgres',
@@ -41,7 +34,7 @@ import { ProductUserProductSettingsModule } from './userProductsSettings/Product
           autoLoadEntities: true,
           synchronize: true,
           migrations: ['dist/src/migrations/*{.ts,.js}'],
-          migrationsRun: true,
+          migrationsRun: false,
         } as TypeOrmModuleAsyncOptions;
       },
     }),

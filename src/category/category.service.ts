@@ -11,7 +11,10 @@ export class CategoryService {
   ) {}
 
   async findAll(): Promise<Category[]> {
-    return this.categoryRepository.find();
+    return this.categoryRepository
+      .createQueryBuilder('category')
+      .orderBy('category.name', 'ASC')
+      .getMany();
   }
 
   async findByIds(ids: number[]): Promise<Category[]> {

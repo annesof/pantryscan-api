@@ -40,17 +40,14 @@ input CreateArticleInput {
   quantity: Float!
 }
 
-input CreateProductInput {
-  brand: String!
-  ean: String!
-  genericName: String!
-  imageSmallUrl: String!
-  imageUrl: String!
-  ingredients: String!
+input CreatePersonalProductUserProductSettingsInput {
+  categoryIds: String!
+  contentUnitId: Float!
+  image: String!
+  locationId: String!
   name: String!
-  nutriscoreGrade: String!
-  quantity: String!
-  servingSize: String!
+  productEan: String!
+  userId: Float!
 }
 
 input CreateUserProductSettingsInput {
@@ -79,11 +76,13 @@ type Location {
 
 type Mutation {
   createArticle(createArticleInput: CreateArticleInput!): Article!
-  createProduct(createProductInput: CreateProductInput!): Product!
+  createLocation(id: String!, name: String!): Location!
+  createPersonalProductAndPreferences(createPersonalProductUserProductSettingsInput: CreatePersonalProductUserProductSettingsInput!): UserProductSettings!
   createUserProductSettings(createUserProductSettingsInput: CreateUserProductSettingsInput!): UserProductSettings!
   deleteArticle(id: Float!): Boolean!
   switchArticleLocation(switchArticleInput: SwitchArticleInput!): Article!
   updateArticle(updateArticleInput: UpdateArticleInput!): ArticleOrBoolean!
+  updateLocation(id: String!, name: String!): Location!
 }
 
 """product """
@@ -99,6 +98,7 @@ type Product {
   newlyAdded: Boolean!
   nutriscoreGrade: String
   quantity: String
+  user: User!
   userProductSettings: [UserProductSettings!]
 }
 
@@ -109,6 +109,7 @@ type Query {
   findByProductAndUser(ean: String!, idUser: Float!): UserProductSettings!
   findOneProduct(ean: String!): Product!
   findOneUser(id: Float!): User!
+  findPersonalProducts(idUser: Float!): [Product!]!
   findProducts(fetchProductsArgs: FetchProductsArgs!): [Product!]!
 }
 

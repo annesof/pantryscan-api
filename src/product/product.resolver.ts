@@ -1,14 +1,7 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
-import { CreateProductInput } from './dto/create-product.input';
+
 import { Article } from 'src/article/article.entity';
 import { ArticleService } from 'src/article/article.service';
 
@@ -19,16 +12,21 @@ export class ProductResolver {
     private readonly articleService: ArticleService, //private readonly productUserProductSettingsService: ProductUserProductSettingsService,
   ) {}
 
-  @Mutation(() => Product, { name: 'createProduct' })
+  /* @Mutation(() => Product, { name: 'createProduct' })
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
     return this.productService.create(createProductInput);
-  }
+  }*/
 
   @Query(() => Product, { name: 'findOneProduct' })
   findOne(@Args('ean', { type: () => String }) id: string) {
     return this.productService.findOne(id);
+  }
+
+  @Query(() => [Product], { name: 'findPersonalProducts' })
+  findPersonalProducts(@Args('idUser', { type: () => Number }) idUser: number) {
+    return this.productService.findPersonalProducts(idUser);
   }
 
   @ResolveField(() => [Article])

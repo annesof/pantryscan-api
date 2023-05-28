@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { catchError, firstValueFrom } from 'rxjs';
+import { User } from 'src/user/user.entity';
 
 const FIELDS = {
   DATE: { field: 'article.createdDate', asc: false },
@@ -21,7 +22,12 @@ export class ProductService {
   ) {}
 
   async create(createProductInput: CreateProductInput): Promise<Product> {
-    const product = this.productRepository.create(createProductInput);
+    const user = new User();
+    user.id = createProductInput.idUser;
+    const product = this.productRepository.create({
+      ...createProductInput,
+      user,
+    });
     return this.productRepository.save(product);
   }
 
@@ -34,6 +40,20 @@ export class ProductService {
         return this.findAndCreateExternalProduct(ean);
       }
       return result;
+    }
+  }
+
+  async findPersonalProducts(idUser: number): Promise<Product[]> {
+    if (idUser) {
+      const products = await this.productRepository
+        .createQueryBuilder('product')
+        .leftJoinAndSelect('product.user', 'user')
+        .andWhere('user.id = (:idUser)', {
+          idUser,
+        })
+        .orderBy('product.name', 'ASC')
+        .getMany();
+      return products;
     }
   }
 
@@ -110,9 +130,10 @@ export class ProductService {
       .andWhere(locationId ? 'location.id = (:locationId)' : '1=1', {
         locationId,
       })
-      .andWhere('user.id = (:userId)', {
+      .andWhere('user.id = :userId', {
         userId,
       })
+
       .orderBy(FIELDS[sortBy].field, FIELDS[sortBy].asc ? 'ASC' : 'DESC')
       .skip(skip)
       .take(take)
