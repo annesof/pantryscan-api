@@ -8,27 +8,30 @@ export class CreateProductInput {
   @Field()
   name: string;
 
-  @Field()
-  brand: string;
+  @Field({ nullable: true })
+  brand?: string;
 
-  @Field()
-  genericName: string;
+  @Field({ nullable: true })
+  genericName?: string;
 
-  @Field()
+  @Field({ nullable: true })
   ingredients?: string;
 
-  @Field()
-  imageUrl: string;
+  @Field({ nullable: true })
+  imageUrl?: string;
 
   @Field()
   imageSmallUrl: string;
 
-  @Field()
+  @Field({ nullable: true })
   nutriscoreGrade?: string;
 
-  @Field()
+  @Field({ nullable: true })
   quantity?: string;
 
-  @Field()
+  @Field({ nullable: true })
   servingSize?: string;
+
+  @Field({ nullable: true })
+  idUser?: number;
 }

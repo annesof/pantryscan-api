@@ -6,10 +6,11 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Article } from '../article/article.entity';
 import { UserProductSettings } from 'src/userProductsSettings/userProductSettings.entity';
-
+import { User } from 'src/user/user.entity';
 @ObjectType({ description: 'product ' })
 @Entity()
 export class Product {
@@ -65,4 +66,8 @@ export class Product {
   @OneToMany(() => UserProductSettings, (settings) => settings.product)
   @Field(() => [UserProductSettings], { nullable: true })
   userProductSettings?: UserProductSettings[];
+
+  @ManyToOne(() => User, { eager: true })
+  @Field()
+  user?: User;
 }

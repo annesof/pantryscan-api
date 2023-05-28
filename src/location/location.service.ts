@@ -12,8 +12,18 @@ export class LocationService {
   ) {}
 
   async create(createLocationInput: CreateLocationInput): Promise<Location> {
-    const product = this.locationRepository.create(createLocationInput);
-    return this.locationRepository.save(product);
+    const location = this.locationRepository.create(createLocationInput);
+    return this.locationRepository.save(location);
+  }
+
+  async update(id: string, name: string): Promise<Location> {
+    if (name !== '') {
+      const location = await this.locationRepository.findOneOrFail({
+        where: { id },
+      });
+      location.name = name;
+      return this.locationRepository.save(location);
+    }
   }
 
   async findAll(): Promise<Location[]> {

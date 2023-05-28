@@ -14,7 +14,8 @@ import { ContentUnitService } from 'src/contentUnit/contentUnit.service';
 import { User } from 'src/user/user.entity';
 import { UserProductSettingsService } from './userProductSettings.service';
 import { CategoryService } from 'src/category/category.service';
-
+import { CreatePersonalProductUserProductSettingsInput } from './dto/create-user-personal-product-settings.input';
+import { CreateProductInput } from 'src/product/dto/create-product.input';
 @Injectable()
 export class ProductUserProductSettingsService {
   constructor(
@@ -85,5 +86,21 @@ export class ProductUserProductSettingsService {
     settings.categories = categories;
 
     return this.userProductSettingsRepository.save(settings);
+  }
+
+  async createPersonalProductUser(
+    createPersonalProductUserProductSettingsInput: CreatePersonalProductUserProductSettingsInput,
+  ): Promise<UserProductSettings> {
+    const productInput = new CreateProductInput();
+    productInput.ean = createPersonalProductUserProductSettingsInput.productEan;
+    productInput.idUser = createPersonalProductUserProductSettingsInput.userId;
+    productInput.name = createPersonalProductUserProductSettingsInput.name;
+    productInput.imageSmallUrl =
+      createPersonalProductUserProductSettingsInput.image;
+    const product = await this.productService.create(productInput);
+
+    createPersonalProductUserProductSettingsInput.productEan = product.ean;
+
+    return this.create(createPersonalProductUserProductSettingsInput);
   }
 }

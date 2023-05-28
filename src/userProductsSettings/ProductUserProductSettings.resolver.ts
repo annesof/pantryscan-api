@@ -4,6 +4,7 @@ import { CreateUserProductSettingsInput } from './dto/create-user-products-setti
 import { ProductUserProductSettingsService } from './ProductUserProductSettings.service';
 import { FetchProductsArgs } from 'src/product/dto/fetch-products.args';
 import { Product } from 'src/product/product.entity';
+import { CreatePersonalProductUserProductSettingsInput } from './dto/create-user-personal-product-settings.input';
 
 @Resolver(() => UserProductSettings)
 export class ProductUserProductSettingsResolver {
@@ -27,6 +28,18 @@ export class ProductUserProductSettingsResolver {
   ) {
     return this.productUserProductSettingsService.findProductsByLocationAndCategories(
       fetchProductsArgs,
+    );
+  }
+
+  @Mutation(() => UserProductSettings, {
+    name: 'createPersonalProductAndPreferences',
+  })
+  createPersonalProductAndPreferences(
+    @Args('createPersonalProductUserProductSettingsInput')
+    createPersonalProductUserProductSettingsInput: CreatePersonalProductUserProductSettingsInput,
+  ) {
+    return this.productUserProductSettingsService.createPersonalProductUser(
+      createPersonalProductUserProductSettingsInput,
     );
   }
 }

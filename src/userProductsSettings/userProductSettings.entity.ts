@@ -42,12 +42,4 @@ export class UserProductSettings {
   @JoinTable()
   @Field(() => [Category], { nullable: true })
   categories?: Category[];
-
-  /*@Column({ nullable: true })
-  categoryIds: string;*/
-
-  /*@Field(() => [String])
-  get categories(): string[] {
-    return this.categoryIds.split(',');
-  }*/
 }
