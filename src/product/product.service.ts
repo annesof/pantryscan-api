@@ -135,8 +135,6 @@ export class ProductService {
       })
 
       .orderBy(FIELDS[sortBy].field, FIELDS[sortBy].asc ? 'ASC' : 'DESC')
-      .skip(skip)
-      .take(take)
       .getMany();
   }
 }
