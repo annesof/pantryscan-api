@@ -1,6 +1,7 @@
 ## PantryScan Graphql API 🔥
 
 TODO - Watch for Integrate Apollo Server 4 in nestJS
+TODO - Add tests
 
 needs a postgres database
 
