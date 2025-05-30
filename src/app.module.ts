@@ -39,11 +39,6 @@ import { ProductUserProductSettingsModule } from './userProductsSettings/Product
       },
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      cors: {
-        origin: 'http://localhost:5173',
-        credentials: true,
-      },
-      playground: true,
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       buildSchemaOptions: {
